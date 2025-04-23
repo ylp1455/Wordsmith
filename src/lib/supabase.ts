@@ -2,10 +2,19 @@ import { createClient } from '@supabase/supabase-js';
 
 // Initialize Supabase client
 // In a real app, these would be set in environment variables
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 'your-supabase-url';
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || 'your-supabase-anon-key';
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 'https://example.supabase.co';
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.example';
 
+// Log the Supabase URL for debugging
+console.log('Supabase URL:', supabaseUrl);
+
+// Create the Supabase client with error handling
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+
+// Check if the connection is valid
+supabase.auth.onAuthStateChange((event, session) => {
+  console.log('Supabase auth state changed:', event);
+}).data.subscription.unsubscribe();
 
 export async function signUp(email: string, password: string) {
   const { data, error } = await supabase.auth.signUp({
@@ -37,7 +46,7 @@ export async function saveArticle(title: string, content: string, userId: string
   const { data, error } = await supabase
     .from('articles')
     .insert([{ title, content, user_id: userId }]);
-  
+
   return { data, error };
 }
 
@@ -47,7 +56,7 @@ export async function getUserArticles(userId: string) {
     .select('*')
     .eq('user_id', userId)
     .order('created_at', { ascending: false });
-    
+
   return { data, error };
 }
 
@@ -56,7 +65,7 @@ export async function deleteArticle(articleId: string) {
     .from('articles')
     .delete()
     .eq('id', articleId);
-    
+
   return { error };
 }
 
@@ -65,6 +74,6 @@ export async function updateUserSubscription(userId: string, status: string) {
     .from('profiles')
     .update({ subscription_status: status })
     .eq('id', userId);
-    
+
   return { error };
 }

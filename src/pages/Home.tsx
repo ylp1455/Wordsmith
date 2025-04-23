@@ -1,11 +1,22 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FileText, Edit, Sparkles, Shield, Brain, Award, ChevronRight } from 'lucide-react';
+import { FileText, Edit, Sparkles, Shield, Brain, Award, ChevronRight, AlertCircle } from 'lucide-react';
 import Button from '../components/UI/Button';
 import Card from '../components/UI/Card';
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
+  const [error, setError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    // Simulate loading and check for any issues
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, []);
 
   const features = [
     {
@@ -48,8 +59,22 @@ const Home: React.FC = () => {
     },
   ];
 
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col min-h-screen">
+      {error && (
+        <div className="bg-red-50 border border-red-200 rounded-md p-4 m-4 flex items-start">
+          <AlertCircle className="h-5 w-5 text-red-500 mr-3 flex-shrink-0 mt-0.5" />
+          <p className="text-red-700">{error}</p>
+        </div>
+      )}
       {/* Hero Section */}
       <section className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -101,7 +126,7 @@ const Home: React.FC = () => {
               Our AI article writer comes packed with features designed to make content creation effortless and efficient.
             </p>
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {features.map((feature, index) => (
               <Card key={index} className="h-full transition-transform duration-300 hover:-translate-y-2">
@@ -125,7 +150,7 @@ const Home: React.FC = () => {
               Generate high-quality articles in three simple steps
             </p>
           </div>
-          
+
           <div className="flex flex-col md:flex-row gap-8 justify-between items-center">
             <div className="md:w-1/2">
               <div className="space-y-8">
@@ -138,7 +163,7 @@ const Home: React.FC = () => {
                     </p>
                   </div>
                 </div>
-                
+
                 <div className="flex items-start gap-4">
                   <div className="flex-shrink-0 w-8 h-8 rounded-full bg-indigo-600 text-white flex items-center justify-center font-bold">2</div>
                   <div>
@@ -148,7 +173,7 @@ const Home: React.FC = () => {
                     </p>
                   </div>
                 </div>
-                
+
                 <div className="flex items-start gap-4">
                   <div className="flex-shrink-0 w-8 h-8 rounded-full bg-indigo-600 text-white flex items-center justify-center font-bold">3</div>
                   <div>
@@ -160,7 +185,7 @@ const Home: React.FC = () => {
                 </div>
               </div>
             </div>
-            
+
             <div className="md:w-1/2">
               <img
                 src="https://images.pexels.com/photos/7439153/pexels-photo-7439153.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
@@ -181,10 +206,10 @@ const Home: React.FC = () => {
               Our AI article writer has helped thousands of content creators, researchers, and businesses.
             </p>
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {testimonials.map((testimonial, index) => (
-              <div 
+              <div
                 key={index}
                 className="bg-white bg-opacity-10 backdrop-blur-sm rounded-lg p-6 border border-white border-opacity-20"
               >
