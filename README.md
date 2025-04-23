@@ -1,4 +1,4 @@
-# AI Article Writer
+# Wordsmith
 
 ## Description:
 
@@ -17,7 +17,7 @@ This project aims to develop an AI-powered article writer capable of generating 
 
 * **Programming Languages**: Python
 * **Frameworks**: Flask (or Django, if applicable)
-* **Libraries**: 
+* **Libraries**:
   * TensorFlow (for machine learning models)
   * NLTK (Natural Language Toolkit for processing text)
   * OpenAI API (for advanced language models)

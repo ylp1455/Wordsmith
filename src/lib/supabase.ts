@@ -1,35 +1,73 @@
 import { createClient } from '@supabase/supabase-js';
 
-// Initialize Supabase client
-// In a real app, these would be set in environment variables
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 'https://example.supabase.co';
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.example';
+// Initialize Supabase client with environment variables
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
-// Log the Supabase URL for debugging
-console.log('Supabase URL:', supabaseUrl);
+// Validate environment variables
+if (!supabaseUrl || !supabaseAnonKey) {
+  console.error(
+    'Missing Supabase environment variables. Please check your .env file.'
+  );
+}
 
-// Create the Supabase client with error handling
+// Create the Supabase client
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
-// Check if the connection is valid
-supabase.auth.onAuthStateChange((event, session) => {
-  console.log('Supabase auth state changed:', event);
-}).data.subscription.unsubscribe();
+// Initialize auth state listener for debugging
+try {
+  const { data } = supabase.auth.onAuthStateChange((event, session) => {
+    console.log(`Auth event: ${event}`, session ? 'User session exists' : 'No user session');
+  });
+
+  // We don't actually want to unsubscribe, as we need to listen for auth changes
+  // This was just for debugging purposes in the previous code
+} catch (error) {
+  console.error('Error setting up auth listener:', error);
+}
 
 export async function signUp(email: string, password: string) {
-  const { data, error } = await supabase.auth.signUp({
-    email,
-    password,
-  });
-  return { data, error };
+  try {
+    // Sign up the user with Supabase Auth
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        // Send email confirmation
+        emailRedirectTo: `${window.location.origin}/auth`,
+      },
+    });
+
+    if (error) {
+      throw error;
+    }
+
+    // The profile should be created automatically via database trigger
+    // defined in the SQL setup script
+
+    return { data, error: null };
+  } catch (error: any) {
+    console.error('Error during sign up:', error);
+    return { data: null, error };
+  }
 }
 
 export async function signIn(email: string, password: string) {
-  const { data, error } = await supabase.auth.signInWithPassword({
-    email,
-    password,
-  });
-  return { data, error };
+  try {
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+
+    if (error) {
+      throw error;
+    }
+
+    return { data, error: null };
+  } catch (error: any) {
+    console.error('Error during sign in:', error);
+    return { data: null, error };
+  }
 }
 
 export async function signOut() {

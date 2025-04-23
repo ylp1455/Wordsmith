@@ -6,12 +6,18 @@ import ArticleWriter from './pages/ArticleWriter';
 import MyArticles from './pages/MyArticles';
 import Payment from './pages/Payment';
 import Auth from './pages/Auth';
+import Testimonials from './pages/Testimonials';
+import FAQ from './pages/FAQ';
+import Contact from './pages/Contact';
+import SupportCenter from './pages/SupportCenter';
+import TermsOfService from './pages/TermsOfService';
+import PrivacyPolicy from './pages/PrivacyPolicy';
 import { AuthProvider, useAuth } from './context/AuthContext';
 
 // Protected route component
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const { user, loading } = useAuth();
-  
+
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
@@ -19,11 +25,11 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
       </div>
     );
   }
-  
+
   if (!user) {
     return <Navigate to="/auth" replace />;
   }
-  
+
   return <>{children}</>;
 };
 
@@ -39,6 +45,15 @@ function AppRoutes() {
       } />
       <Route path="/payment" element={<Payment />} />
       <Route path="/auth" element={<Auth />} />
+
+      {/* New Pages */}
+      <Route path="/testimonials" element={<Testimonials />} />
+      <Route path="/faq" element={<FAQ />} />
+      <Route path="/contact" element={<Contact />} />
+      <Route path="/support" element={<SupportCenter />} />
+      <Route path="/terms" element={<TermsOfService />} />
+      <Route path="/privacy" element={<PrivacyPolicy />} />
+
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );

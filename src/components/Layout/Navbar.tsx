@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, Pen, BookOpen, Home, CreditCard, LogIn, LogOut, User } from 'lucide-react';
+import { Menu, X, Pen, BookOpen, Home, CreditCard, LogIn, LogOut, User, HelpCircle, MessageSquare } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 
 const Navbar: React.FC = () => {
@@ -28,6 +28,8 @@ const Navbar: React.FC = () => {
   const navLinks = [
     { name: 'Home', path: '/', icon: <Home size={20} /> },
     { name: 'Article Writer', path: '/writer', icon: <Pen size={20} /> },
+    { name: 'FAQ', path: '/faq', icon: <HelpCircle size={20} /> },
+    { name: 'Support', path: '/support', icon: <MessageSquare size={20} /> },
   ];
 
   // Add authenticated routes
@@ -42,7 +44,7 @@ const Navbar: React.FC = () => {
         <div className="flex items-center">
           <Link to="/" className="flex items-center gap-2 text-indigo-600 font-semibold text-xl">
             <Pen className="h-6 w-6" />
-            <span>ArticleAI</span>
+            <span>Wordsmith</span>
           </Link>
         </div>
 
@@ -62,7 +64,7 @@ const Navbar: React.FC = () => {
               <span>{link.name}</span>
             </Link>
           ))}
-          
+
           {user && authLinks.map((link) => (
             <Link
               key={link.path}
@@ -77,7 +79,7 @@ const Navbar: React.FC = () => {
               <span>{link.name}</span>
             </Link>
           ))}
-          
+
           {user ? (
             <div className="flex items-center gap-4">
               <div className="flex items-center gap-1 text-gray-600">
@@ -133,7 +135,7 @@ const Navbar: React.FC = () => {
                 <span>{link.name}</span>
               </Link>
             ))}
-            
+
             {user && authLinks.map((link) => (
               <Link
                 key={link.path}
@@ -149,7 +151,7 @@ const Navbar: React.FC = () => {
                 <span>{link.name}</span>
               </Link>
             ))}
-            
+
             {user ? (
               <>
                 <div className="flex items-center gap-1 text-gray-600 px-2 py-2">

@@ -10,7 +10,7 @@ const Footer: React.FC = () => {
           <div className="col-span-1 md:col-span-2">
             <Link to="/" className="flex items-center gap-2 text-indigo-600 font-semibold text-xl">
               <Pen className="h-6 w-6" />
-              <span>ArticleAI</span>
+              <span>Wordsmith</span>
             </Link>
             <p className="mt-4 text-gray-600 max-w-md">
               Revolutionizing content creation with AI-powered article writing.
@@ -46,14 +46,14 @@ const Footer: React.FC = () => {
                 </Link>
               </li>
               <li>
-                <a href="#" className="text-gray-600 hover:text-indigo-500 transition-colors">
+                <Link to="/testimonials" className="text-gray-600 hover:text-indigo-500 transition-colors">
                   Testimonials
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className="text-gray-600 hover:text-indigo-500 transition-colors">
+                <Link to="/faq" className="text-gray-600 hover:text-indigo-500 transition-colors">
                   FAQ
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
@@ -63,24 +63,29 @@ const Footer: React.FC = () => {
             <ul className="mt-4 space-y-3">
               <li className="flex items-center gap-2 text-gray-600">
                 <Mail size={16} />
-                <a href="mailto:support@articleai.com" className="hover:text-indigo-500 transition-colors">
-                  support@articleai.com
+                <a href="mailto:support@wordsmith.com" className="hover:text-indigo-500 transition-colors">
+                  support@wordsmith.com
                 </a>
               </li>
               <li>
-                <a href="#" className="text-gray-600 hover:text-indigo-500 transition-colors">
+                <Link to="/contact" className="text-gray-600 hover:text-indigo-500 transition-colors">
+                  Contact Us
+                </Link>
+              </li>
+              <li>
+                <Link to="/support" className="text-gray-600 hover:text-indigo-500 transition-colors">
                   Support Center
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className="text-gray-600 hover:text-indigo-500 transition-colors">
+                <Link to="/terms" className="text-gray-600 hover:text-indigo-500 transition-colors">
                   Terms of Service
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className="text-gray-600 hover:text-indigo-500 transition-colors">
+                <Link to="/privacy" className="text-gray-600 hover:text-indigo-500 transition-colors">
                   Privacy Policy
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
@@ -88,10 +93,10 @@ const Footer: React.FC = () => {
 
         <div className="mt-12 pt-8 border-t border-gray-200 flex flex-col md:flex-row justify-between items-center">
           <p className="text-gray-500 text-sm">
-            &copy; {new Date().getFullYear()} ArticleAI. All rights reserved.
+            &copy; {new Date().getFullYear()} Wordsmith. All rights reserved.
           </p>
           <p className="text-gray-500 text-sm mt-4 md:mt-0 flex items-center">
-            Made with <Heart size={16} className="mx-1 text-red-500" /> using modern web technologies
+            Created by <span className="font-medium text-indigo-600 mx-1">Azriel Tech Labs</span>
           </p>
         </div>
       </div>

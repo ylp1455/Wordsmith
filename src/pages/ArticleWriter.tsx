@@ -15,7 +15,7 @@ import { ArticleOptions } from '../types';
 const ArticleWriter: React.FC = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
-  
+
   const [pdfFile, setPdfFile] = useState<File | null>(null);
   const [pdfContent, setPdfContent] = useState<string | null>(null);
   const [prompt, setPrompt] = useState('');
@@ -25,17 +25,17 @@ const ArticleWriter: React.FC = () => {
     style: 'article',
     length: 500,
   });
-  
+
   const [generatedArticle, setGeneratedArticle] = useState<string | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
-  
+
   const handlePdfUpload = async (file: File | null) => {
     setPdfFile(file);
     setError(null);
-    
+
     if (file) {
       try {
         const content = await parseUploadedPdf(file);
@@ -49,40 +49,40 @@ const ArticleWriter: React.FC = () => {
       setPdfContent(null);
     }
   };
-  
+
   const handleToneChange = (tone: string) => {
     setOptions((prev) => ({ ...prev, tone: tone as ArticleOptions['tone'] }));
   };
-  
+
   const handleStyleChange = (style: string) => {
     setOptions((prev) => ({ ...prev, style: style as ArticleOptions['style'] }));
   };
-  
+
   const handleLengthChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const length = parseInt(e.target.value);
     setOptions((prev) => ({ ...prev, length: isNaN(length) ? 500 : length }));
   };
-  
+
   const handleGenerateArticle = async () => {
     if (!prompt.trim()) {
       setError('Please enter a prompt for your article.');
       return;
     }
-    
+
     setError(null);
     setSuccessMessage(null);
     setIsGenerating(true);
-    
+
     try {
       const article = await generateArticle(pdfContent, prompt, options);
       setGeneratedArticle(article);
-      
+
       // Extract a title from the prompt if no title is set
       if (!title) {
         const promptWords = prompt.split(' ');
         setTitle(
-          promptWords.length > 5 
-            ? `${promptWords.slice(0, 5).join(' ')}...` 
+          promptWords.length > 5
+            ? `${promptWords.slice(0, 5).join(' ')}...`
             : prompt
         );
       }
@@ -93,36 +93,36 @@ const ArticleWriter: React.FC = () => {
       setIsGenerating(false);
     }
   };
-  
+
   const handleSaveArticle = async () => {
     if (!user) {
       navigate('/auth', { state: { returnTo: '/writer' } });
       return;
     }
-    
+
     if (!generatedArticle) {
       setError('Please generate an article first.');
       return;
     }
-    
+
     if (!title.trim()) {
       setError('Please enter a title for your article.');
       return;
     }
-    
+
     setError(null);
     setSuccessMessage(null);
     setIsSaving(true);
-    
+
     try {
       const { error } = await saveArticle(title, generatedArticle, user.id);
-      
+
       if (error) {
         throw new Error(error.message);
       }
-      
+
       setSuccessMessage('Article saved successfully!');
-      
+
       // Reset after short delay
       setTimeout(() => {
         setSuccessMessage(null);
@@ -134,19 +134,19 @@ const ArticleWriter: React.FC = () => {
       setIsSaving(false);
     }
   };
-  
+
   const handleCopyContent = () => {
     if (generatedArticle) {
       navigator.clipboard.writeText(generatedArticle);
       setSuccessMessage('Content copied to clipboard!');
-      
+
       // Reset after short delay
       setTimeout(() => {
         setSuccessMessage(null);
       }, 3000);
     }
   };
-  
+
   const handleDownloadContent = () => {
     if (generatedArticle) {
       const element = document.createElement('a');
@@ -158,13 +158,13 @@ const ArticleWriter: React.FC = () => {
       document.body.removeChild(element);
     }
   };
-  
+
   return (
     <div className="py-8 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
       <div className="max-w-4xl mx-auto">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">AI Article Writer</h1>
+            <h1 className="text-3xl font-bold text-gray-900">Wordsmith Article Writer</h1>
             <p className="mt-2 text-gray-600">
               Upload reference documents, set your preferences, and generate high-quality articles
             </p>
@@ -179,14 +179,14 @@ const ArticleWriter: React.FC = () => {
                 <FileText size={20} className="text-indigo-600" />
                 Input & Preferences
               </h2>
-              
+
               <div className="space-y-6">
-                <FileUpload 
+                <FileUpload
                   label="Upload a PDF document (optional)"
                   accept=".pdf"
                   onChange={handlePdfUpload}
                 />
-                
+
                 <Textarea
                   label="Your writing prompt"
                   placeholder="Describe what you want the AI to write about..."
@@ -195,7 +195,7 @@ const ArticleWriter: React.FC = () => {
                   fullWidth
                   rows={4}
                 />
-                
+
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <Select
                     label="Tone"
@@ -210,7 +210,7 @@ const ArticleWriter: React.FC = () => {
                     onChange={handleToneChange}
                     fullWidth
                   />
-                  
+
                   <Select
                     label="Style"
                     options={[
@@ -224,7 +224,7 @@ const ArticleWriter: React.FC = () => {
                     onChange={handleStyleChange}
                     fullWidth
                   />
-                  
+
                   <div>
                     <label htmlFor="length" className="block text-sm font-medium text-gray-700 mb-1">
                       Length (words)
@@ -246,7 +246,7 @@ const ArticleWriter: React.FC = () => {
                     </div>
                   </div>
                 </div>
-                
+
                 <div>
                   <Button
                     onClick={handleGenerateArticle}
@@ -268,18 +268,18 @@ const ArticleWriter: React.FC = () => {
               <div className="space-y-6">
                 <div className="flex justify-between items-center">
                   <h2 className="text-xl font-semibold text-gray-900">Generated Article</h2>
-                  
+
                   <div className="flex gap-2">
-                    <Button 
-                      variant="outline" 
+                    <Button
+                      variant="outline"
                       size="sm"
                       onClick={handleCopyContent}
                       disabled={!generatedArticle || isGenerating}
                     >
                       Copy
                     </Button>
-                    <Button 
-                      variant="outline" 
+                    <Button
+                      variant="outline"
                       size="sm"
                       leftIcon={<Download size={16} />}
                       onClick={handleDownloadContent}
@@ -289,7 +289,7 @@ const ArticleWriter: React.FC = () => {
                     </Button>
                   </div>
                 </div>
-                
+
                 <Input
                   label="Article Title"
                   placeholder="Enter a title for your article"
@@ -298,7 +298,7 @@ const ArticleWriter: React.FC = () => {
                   fullWidth
                   disabled={isGenerating}
                 />
-                
+
                 {isGenerating ? (
                   <div className="border rounded-md p-4 min-h-[300px] flex flex-col items-center justify-center">
                     <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mb-4"></div>
@@ -324,7 +324,7 @@ const ArticleWriter: React.FC = () => {
                     </div>
                   </div>
                 )}
-                
+
                 <div>
                   <Button
                     onClick={handleSaveArticle}
@@ -345,7 +345,7 @@ const ArticleWriter: React.FC = () => {
               </div>
             </Card>
           )}
-          
+
           {/* Messages */}
           {error && (
             <div className="bg-red-50 border border-red-200 rounded-md p-4 flex items-start">
@@ -353,7 +353,7 @@ const ArticleWriter: React.FC = () => {
               <p className="text-red-700">{error}</p>
             </div>
           )}
-          
+
           {successMessage && (
             <div className="bg-green-50 border border-green-200 rounded-md p-4 flex items-start">
               <div className="h-5 w-5 text-green-500 mr-3 flex-shrink-0 mt-0.5">✓</div>

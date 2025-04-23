@@ -43,7 +43,7 @@ const Home: React.FC = () => {
 
   const testimonials = [
     {
-      quote: "ArticleAI has transformed my content workflow. I can now produce high-quality articles in minutes instead of hours.",
+      quote: "Wordsmith has transformed my content workflow. I can now produce high-quality articles in minutes instead of hours.",
       author: "Sarah Johnson",
       role: "Content Manager",
     },
@@ -53,7 +53,7 @@ const Home: React.FC = () => {
       role: "Academic Researcher",
     },
     {
-      quote: "I've tried many AI writing tools, but ArticleAI stands out for its customization options and quality of output.",
+      quote: "I've tried many AI writing tools, but Wordsmith stands out for its customization options and quality of output.",
       author: "Jessica Williams",
       role: "Marketing Director",
     },
@@ -189,7 +189,7 @@ const Home: React.FC = () => {
             <div className="md:w-1/2">
               <img
                 src="https://images.pexels.com/photos/7439153/pexels-photo-7439153.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
-                alt="How ArticleAI Works"
+                alt="How Wordsmith Works"
                 className="rounded-lg shadow-lg"
               />
             </div>
@@ -233,7 +233,7 @@ const Home: React.FC = () => {
           <Award className="h-16 w-16 mx-auto text-indigo-600 mb-4" />
           <h2 className="text-3xl font-bold text-gray-900 mb-6">Ready to transform your content creation?</h2>
           <p className="text-xl text-gray-600 mb-8">
-            Join thousands of content creators who are saving time and producing better content with ArticleAI.
+            Join thousands of content creators who are saving time and producing better content with Wordsmith.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             <Button
