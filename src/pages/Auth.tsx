@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { LogIn, UserPlus, Mail, KeyRound, AlertCircle } from 'lucide-react';
+import { useLocation, useNavigate, Link } from 'react-router-dom';
+import { LogIn, UserPlus, Mail, KeyRound, AlertCircle, HelpCircle } from 'lucide-react';
 import Card from '../components/UI/Card';
 import Input from '../components/UI/Input';
 import Button from '../components/UI/Button';
@@ -52,30 +52,48 @@ const Auth: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    console.log('Form submitted');
 
     if (!validateForm()) {
+      console.log('Form validation failed');
       return;
     }
 
     setError(null);
     setSuccessMessage(null);
     setLoading(true);
+    console.log('Attempting authentication with:', { email, mode });
 
     try {
       if (mode === 'signin') {
+        console.log('Signing in...');
         const { error } = await signIn(email, password);
+        console.log('Sign in response:', { error });
 
         if (error) {
-          throw new Error(error.message);
+          console.error('Sign in error:', error);
+          throw new Error(error.message || 'Failed to sign in');
         }
 
-        // Redirect after successful sign in
-        navigate(returnTo || '/');
+        console.log('Sign in successful, redirecting to dashboard');
+        // Use both methods for redirection to ensure it works
+        setTimeout(() => {
+          // First try React Router navigation
+          navigate(returnTo || '/dashboard');
+
+          // If that doesn't work, use a hard redirect after a short delay
+          setTimeout(() => {
+            window.location.href = returnTo || '/dashboard';
+          }, 100);
+        }, 500);
       } else {
+        console.log('Signing up...');
         const { error } = await signUp(email, password);
+        console.log('Sign up response:', { error });
 
         if (error) {
-          throw new Error(error.message);
+          console.error('Sign up error:', error);
+          throw new Error(error.message || 'Failed to sign up');
         }
 
         // Show success message for sign up
@@ -90,15 +108,16 @@ const Auth: React.FC = () => {
     } catch (err: any) {
       console.error('Authentication error:', err);
 
-      if (err.message.includes('email') || err.message.includes('Email')) {
+      if (err.message && (err.message.includes('email') || err.message.includes('Email'))) {
         setError('Invalid email address');
-      } else if (err.message.includes('password') || err.message.includes('Password')) {
+      } else if (err.message && (err.message.includes('password') || err.message.includes('Password'))) {
         setError('Invalid password');
       } else {
         setError(err.message || 'An error occurred during authentication');
       }
     } finally {
       setLoading(false);
+      console.log('Authentication process completed');
     }
   };
 
@@ -129,16 +148,29 @@ const Auth: React.FC = () => {
               leftIcon={<Mail size={18} />}
             />
 
-            <Input
-              id="password"
-              type="password"
-              label="Password"
-              placeholder="••••••••"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              fullWidth
-              leftIcon={<KeyRound size={18} />}
-            />
+            <div>
+              <Input
+                id="password"
+                type="password"
+                label="Password"
+                placeholder="••••••••"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                fullWidth
+                leftIcon={<KeyRound size={18} />}
+              />
+              {mode === 'signin' && (
+                <div className="mt-1 text-right">
+                  <Link
+                    to="/reset-password"
+                    className="text-sm text-indigo-600 hover:text-indigo-500 inline-flex items-center"
+                  >
+                    <HelpCircle size={14} className="mr-1" />
+                    Forgot password?
+                  </Link>
+                </div>
+              )}
+            </div>
 
             {error && (
               <div className="bg-red-50 border border-red-200 rounded-md p-3 flex items-start">
